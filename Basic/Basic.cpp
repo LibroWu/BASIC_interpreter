@@ -78,8 +78,11 @@ void processLine(string line, Program & program, EvalState & state) {
        if (token == "HELP") {Program::show_help();}
        else
        if (token == "QUIT") {exit(0);}
+       else throw invalid_argument("");
    }else {
        try {
+           if (token=="IF") throw invalid_argument("");
+           if (token=="GOTO") throw invalid_argument("");
            Statement *sta = parseState(line, 0);
            sta->execute(state);
            delete sta;

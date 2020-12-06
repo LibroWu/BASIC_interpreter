@@ -25,6 +25,7 @@ void Program::clear() {
     auto iter=list_of_program.begin();
     while (iter!=list_of_program.end()){
         delete iter->second.sta;
+        ++iter;
     }
     list_of_program.clear();
 }

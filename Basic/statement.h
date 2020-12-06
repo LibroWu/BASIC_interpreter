@@ -13,6 +13,7 @@
 #define _statement_h
 
 #include <exception>
+#include <set>
 #include "evalstate.h"
 #include "exp.h"
 #include "parser.h"
@@ -79,7 +80,7 @@ public:
  * specify its own destructor method to free that memory.
  */
 
-//1 for have number
+bool check_reserved(string s);
 
 class ControlClass{
 public:
@@ -90,7 +91,7 @@ public:
     int line_number;
     ControlClass(int t,int num=0):type(t),line_number(num){}
 };
-
+//1 FOR HAVE LINE NUMBER
 Statement *parseState(string line,bool flag);
 
 class StateRem : public Statement {
