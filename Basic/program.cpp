@@ -15,13 +15,10 @@ using namespace std;
 
 Program::Program() {
     list_of_program.clear();
-   setParsedStatement(end_line,parseState("END",0));
 }
 
 Program::~Program() {
-   // Replace this stub with your own code
     clear();
-    delete list_of_program[end_line].sta;
 }
 
 void Program::clear() {
@@ -30,7 +27,6 @@ void Program::clear() {
         delete iter->second.sta;
     }
     list_of_program.clear();
-    setParsedStatement(end_line,parseState("END",0));
 }
 
 void Program::addSourceLine(int lineNumber, string line) {
@@ -81,7 +77,16 @@ void Program::run_program(EvalState& state) {
     while (num!=end_line){
         try {
             getParsedStatement(num)->execute(state);
-        } catch (...) {
+        } catch (ControlClass C) {
+            if (C.type==0) {break;}
+            if (C.type==1){
+                if (list_of_program.count(C.line_number)) {
+                    num=C.line_number;
+                    continue;
+                }
+            }
+        }
+        catch (...) {
 
         }
         num=getNextLineNumber(num);
@@ -94,4 +99,5 @@ void Program::show_list() {
         num=getNextLineNumber(num);
     }
 }
-void Program::show_help() {}
+void Program::show_help() {
+}

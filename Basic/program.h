@@ -162,7 +162,7 @@ public:
 private:
 
 // Fill this in with whatever types and instance variables you need
-    int end_line=1e18;
+    int end_line=1e9;
     struct Line{
         string line;
         Statement* sta= nullptr;

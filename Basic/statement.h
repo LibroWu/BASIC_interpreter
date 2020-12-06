@@ -80,6 +80,17 @@ public:
  */
 
 //1 for have number
+
+class ControlClass{
+public:
+    //0 for end
+    //1 for goto
+    //2 for nothing
+    int type;
+    int line_number;
+    ControlClass(int t,int num=0):type(t),line_number(num){}
+};
+
 Statement *parseState(string line,bool flag);
 
 class StateRem : public Statement {
@@ -106,11 +117,17 @@ private:
 };
 
 class StateIf : public Statement {
-    StateIf();
+public:
+    StateIf(Expression* exp_1,string cmp_,Expression* exp_2,int line_num);
 
     ~StateIf();
 
     virtual void execute(EvalState &state);
+
+private:
+    Expression* exp1,*exp2;
+    string cmp;
+    int Goto_lineNumber;
 };
 
 class StateInput : public Statement {
@@ -139,16 +156,18 @@ private:
 
 
 class StateEnd : public Statement {
+public:
     StateEnd();
 
     ~StateEnd();
 
     virtual void execute(EvalState &state);
+private:
 };
 
 class StateGoto : public Statement {
 public:
-    StateGoto();
+    StateGoto(int Number);
 
     ~StateGoto();
 
