@@ -36,3 +36,18 @@ bool EvalState::isDefined(string var) {
 void EvalState::clear(){
     symbolTable.clear();
 }
+bool check_reserve(string s){
+    if (s=="LET") return 1;
+    if (s=="RUN") return 1;
+    if (s=="LIST")return 1;
+    if (s=="CLEAR")return 1;
+    if (s=="QUIT")return 1;
+    if (s=="HELP")return 1;
+    if (s=="REM")return 1;
+    if (s=="GOTO")return 1;
+    if (s=="END")return 1;
+    if (s=="PRINT")return 1;
+    if (s=="INPUT")return 1;
+    if (s=="")return 1;
+    return 0;
+}

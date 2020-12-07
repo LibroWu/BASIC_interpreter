@@ -86,4 +86,6 @@ private:
 
 };
 
+bool check_reserve(string s);
+
 #endif

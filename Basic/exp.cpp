@@ -117,6 +117,7 @@ int CompoundExp::eval(EvalState & state) {
          error("SYNTAX ERROR");
       }
       int val = rhs->eval(state);
+      if (check_reserve(lhs->toString())) error("SYNTAX ERROR");
       state.setValue(((IdentifierExp *) lhs)->getName(), val);
       return val;
    }

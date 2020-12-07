@@ -80,8 +80,6 @@ public:
  * specify its own destructor method to free that memory.
  */
 
-bool check_reserved(string s);
-
 class ControlClass{
 public:
     //0 for end

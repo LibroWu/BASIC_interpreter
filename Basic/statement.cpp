@@ -22,11 +22,6 @@ Statement::~Statement() {
     /* Empty */
 }
 
-bool check_reserved(string s){
-//todo
-    return 0;
-}
-
 Statement *parseState(string line, bool flag) {
     TokenScanner scanner;
     scanner.ignoreWhitespace();
