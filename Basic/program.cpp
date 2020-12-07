@@ -38,8 +38,14 @@ void Program::addSourceLine(int lineNumber, string line) {
         setParsedStatement(lineNumber,parseState(line,1));
     }
     else {
-        list_of_program[lineNumber].line=line;
-        setParsedStatement(lineNumber,parseState(line,1));
+        try {
+            if (lineNumber<=0) error("LINE NUMBER ERROR");
+            list_of_program[lineNumber].line = line;
+            setParsedStatement(lineNumber, parseState(line, 1));
+        } catch (ErrorException err) {
+            cout<<err.getMessage()<<endl;
+            list_of_program.erase(lineNumber);
+        }
     }
 }
 
@@ -86,7 +92,7 @@ void Program::run_program(EvalState& state) {
                 if (list_of_program.count(C.line_number)) {
                     num=C.line_number;
                     continue;
-                }
+                }else cout<<"LINE NUMBER ERROR"<<endl;
             }
         }
         catch (ErrorException err) {

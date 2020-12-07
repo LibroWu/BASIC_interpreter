@@ -24,6 +24,7 @@ Statement::~Statement() {
 
 bool check_reserved(string s){
 //todo
+    return 0;
 }
 
 Statement *parseState(string line, bool flag) {
@@ -54,12 +55,14 @@ Statement *parseState(string line, bool flag) {
     } else if (first_token == "PRINT") {
         try {
             exp = parseExp(scanner);
-            if (exp->getType() == COMPOUND) throw invalid_argument("");
+            if (exp->getType()==COMPOUND)
+                if (((CompoundExp*)exp)->getOp()=="=") error("SYNTAX ERROR");
             sta = new StatePrint(exp);
             return sta;
-        } catch (...) {
+        } catch (ErrorException err) {
             if (exp != nullptr) delete exp;
             if (sta != nullptr) delete sta;
+            throw err;
         }
     } else if (first_token == "INPUT") {
         try {
@@ -125,6 +128,8 @@ void StateRem::execute(EvalState &state) {}
 
 StateLet::StateLet(TokenScanner &scanner) {
     exp = parseExp(scanner);
+    if (exp->getType()!=COMPOUND) error("SYNTAX ERROR");
+    if (((CompoundExp*)exp)->getOp()!="=") error("SYNTAX ERROR");
 }
 
 StateLet::~StateLet() {
@@ -175,8 +180,9 @@ void StateInput::execute(EvalState &state) {
     int val;
     while (true) {
         try {
-            val = stringToInteger(getLine("?"));
+            val = stringToInteger(getLine(" ? "));
         } catch (...) {
+            cout<<"INVALID NUMBER"<<endl;
             continue;
         }
         break;

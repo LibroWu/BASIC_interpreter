@@ -126,7 +126,7 @@ int CompoundExp::eval(EvalState & state) {
    if (op == "-") return left - right;
    if (op == "*") return left * right;
    if (op == "/") {
-       if (right==0) error("DIVIDED BY ZERO");
+       if (right==0) error("DIVIDE BY ZERO");
        return left / right;
    }
    error("SYNTAX ERROR");

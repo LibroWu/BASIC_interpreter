@@ -72,7 +72,14 @@ public:
  */
 
    bool isDefined(std::string var);
+/*
+ * Method: clear
+ * Usage: state.clear()
+ * --------------------------------------
+ * clear the state
+ */
 
+    void clear();
 private:
 
    Map<std::string,int> symbolTable;

@@ -30,7 +30,7 @@ void processLine(string line, Program & program, EvalState & state);
 int main() {
    EvalState state;
    Program program;
-   cout << "Stub implementation of BASIC" << endl;
+   //cout << "Stub implementation of BASIC" << endl;
    while (true) {
       try {
          processLine(getLine(), program, state);
@@ -65,16 +65,19 @@ void processLine(string line, Program & program, EvalState & state) {
    TokenType token_Type=scanner.getTokenType(token);
    if (token_Type == NUMBER) {
        int line_number=stringToInteger(token);
-       if (scanner.hasMoreTokens())
-           program.addSourceLine(line_number,line);
-       else program.removeSourceLine(line_number);
+       try {
+           if (scanner.hasMoreTokens())
+               program.addSourceLine(line_number, line);
+           else program.removeSourceLine(line_number);
+       } catch (...) {
+       }
    }
    else if (!scanner.hasMoreTokens()) {
        if (token == "LIST") {program.show_list();}
        else
        if (token == "RUN") {program.run_program(state);}
        else
-       if (token == "CLEAR") { program.clear(); }
+       if (token == "CLEAR") { program.clear();state.clear(); }
        else
        if (token == "HELP") {Program::show_help();}
        else
