@@ -19,7 +19,7 @@
 #include "parser.h"
 #include "../StanfordCPPLib/tokenscanner.h"
 #include "../StanfordCPPLib/simpio.h"
-
+#include "../StanfordCPPLib/error.h"
 /*
  * Class: Statement
  * ----------------

@@ -61,6 +61,7 @@ void processLine(string line, Program & program, EvalState & state) {
    scanner.setInput(line);
    string token;
    if (scanner.hasMoreTokens()) token=scanner.nextToken();
+   else return;
    TokenType token_Type=scanner.getTokenType(token);
    if (token_Type == NUMBER) {
        int line_number=stringToInteger(token);
@@ -78,15 +79,17 @@ void processLine(string line, Program & program, EvalState & state) {
        if (token == "HELP") {Program::show_help();}
        else
        if (token == "QUIT") {exit(0);}
-       else throw invalid_argument("");
+       else cout<<"SYNTAX ERROR"<<endl;
    }else {
        try {
-           if (token=="IF") throw invalid_argument("");
-           if (token=="GOTO") throw invalid_argument("");
+           if (token!="LET"&&token!="INPUT"&&token!="PRINT") error("SYNTAX ERROR");
            Statement *sta = parseState(line, 0);
            sta->execute(state);
            delete sta;
-       } catch (...) {
+       } catch (ErrorException err) {
+            cout<<err.getMessage()<<endl;
+       }
+       catch (...) {
 
        }
    }

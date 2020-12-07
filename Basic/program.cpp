@@ -11,6 +11,7 @@
 #include <string>
 #include "program.h"
 #include "statement.h"
+#include "../StanfordCPPLib/error.h"
 using namespace std;
 
 Program::Program() {
@@ -63,6 +64,7 @@ Statement *Program::getParsedStatement(int lineNumber) {
 }
 
 int Program::getFirstLineNumber() {
+    if (list_of_program.empty()) return end_line;
     return list_of_program.begin()->first;
 }
 
@@ -86,6 +88,9 @@ void Program::run_program(EvalState& state) {
                     continue;
                 }
             }
+        }
+        catch (ErrorException err) {
+            cout<<err.getMessage()<<endl;
         }
         catch (...) {
 

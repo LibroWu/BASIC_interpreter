@@ -45,9 +45,11 @@ Statement *parseState(string line, bool flag) {
             sta = new StateLet(scanner);
             return sta;
         }
-        catch (...) {
-            if (sta != nullptr)
-                delete sta;
+        catch (ErrorException err) {
+            if (sta != nullptr) delete sta;
+            throw err;
+        } catch (...) {
+
         }
     } else if (first_token == "PRINT") {
         try {
@@ -82,7 +84,7 @@ Statement *parseState(string line, bool flag) {
             if ((cmp != "=" && cmp != "<" && cmp != ">") || scanner.hasMoreTokens()) {
                 delete exp1;
                 delete exp2;
-                throw invalid_argument("");
+                error("SYNTAX ERROR");
             }
             return new StateIf(exp1, cmp, exp2, line_number);
         }else {
