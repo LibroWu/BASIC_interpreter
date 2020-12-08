@@ -62,8 +62,11 @@ Statement *parseState(string line, bool flag) {
     } else if (first_token == "INPUT") {
         try {
             exp = parseExp(scanner);
-            if (exp->getType() != IDENTIFIER) throw invalid_argument("");
+            if (exp->getType() != IDENTIFIER) error("SYNTAX ERROR");
             return new StateInput(exp);
+        } catch (ErrorException err) {
+            if (exp != nullptr) delete exp;
+            throw err;
         } catch (...) {
             if (exp != nullptr) delete exp;
         }
@@ -106,7 +109,7 @@ Statement *parseState(string line, bool flag) {
             }
             if (scanner.hasMoreTokens())
                 token=scanner.nextToken();
-            else throw invalid_argument("");
+            else error("SYNTAX ERROR");
             scanner.setInput(s1);
             exp1=parseExp(scanner);
             scanner.setInput(s2);
