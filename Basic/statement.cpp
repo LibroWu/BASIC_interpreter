@@ -112,7 +112,7 @@ Statement *parseState(string line, bool flag) {
         if (scanner.hasMoreTokens()) throw invalid_argument("");
         int lineNumber = stringToInteger(s);
         return new StateGoto(lineNumber);
-    } else throw invalid_argument("...");
+    } else error("SYNTAX ERROR");
 }
 
 StateRem::StateRem() {}

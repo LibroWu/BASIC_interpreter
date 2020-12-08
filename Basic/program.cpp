@@ -12,6 +12,7 @@
 #include "program.h"
 #include "statement.h"
 #include "../StanfordCPPLib/error.h"
+
 using namespace std;
 
 Program::Program() {
@@ -23,8 +24,8 @@ Program::~Program() {
 }
 
 void Program::clear() {
-    auto iter=list_of_program.begin();
-    while (iter!=list_of_program.end()){
+    auto iter = list_of_program.begin();
+    while (iter != list_of_program.end()) {
         delete iter->second.sta;
         ++iter;
     }
@@ -32,41 +33,42 @@ void Program::clear() {
 }
 
 void Program::addSourceLine(int lineNumber, string line) {
-    if (list_of_program.count(lineNumber)){
+    if (list_of_program.count(lineNumber)) {
         delete list_of_program[lineNumber].sta;
-        list_of_program[lineNumber].line=line;
-        setParsedStatement(lineNumber,parseState(line,1));
-    }
-    else {
+        list_of_program[lineNumber].line = line;
+        setParsedStatement(lineNumber, parseState(line, 1));
+    } else {
         try {
-            if (lineNumber<=0) error("LINE NUMBER ERROR");
+            if (lineNumber <= 0) error("LINE NUMBER ERROR");
             list_of_program[lineNumber].line = line;
             setParsedStatement(lineNumber, parseState(line, 1));
         } catch (ErrorException err) {
-            cout<<err.getMessage()<<endl;
+            cout << err.getMessage() << endl;
             list_of_program.erase(lineNumber);
         }
     }
 }
 
 void Program::removeSourceLine(int lineNumber) {
-    auto iter=list_of_program.find(lineNumber);
-    delete iter->second.sta;
-    list_of_program.erase(lineNumber);
+    auto iter = list_of_program.find(lineNumber);
+    if (iter != list_of_program.end()) {
+        delete iter->second.sta;
+        list_of_program.erase(lineNumber);
+    }
 }
 
 string Program::getSourceLine(int lineNumber) {
-   auto iter=list_of_program.find(lineNumber);
-   return iter->second.line;
+    auto iter = list_of_program.find(lineNumber);
+    return iter->second.line;
 }
 
 void Program::setParsedStatement(int lineNumber, Statement *stmt) {
-   list_of_program[lineNumber].sta=stmt;
+    list_of_program[lineNumber].sta = stmt;
 }
 
 Statement *Program::getParsedStatement(int lineNumber) {
-   auto iter=list_of_program.find(lineNumber);
-   return iter->second.sta;
+    auto iter = list_of_program.find(lineNumber);
+    return iter->second.sta;
 }
 
 int Program::getFirstLineNumber() {
@@ -75,41 +77,43 @@ int Program::getFirstLineNumber() {
 }
 
 int Program::getNextLineNumber(int lineNumber) {
-    auto iter=list_of_program.find(lineNumber);
+    auto iter = list_of_program.find(lineNumber);
     iter++;
-    if (iter==list_of_program.end()) return end_line;
+    if (iter == list_of_program.end()) return end_line;
     return iter->first;
 }
 
-void Program::run_program(EvalState& state) {
-    int num=getFirstLineNumber();
-    while (num!=end_line){
+void Program::run_program(EvalState &state) {
+    int num = getFirstLineNumber();
+    while (num != end_line) {
         try {
             getParsedStatement(num)->execute(state);
         } catch (ControlClass C) {
-            if (C.type==0) {break;}
-            if (C.type==1){
+            if (C.type == 0) { break; }
+            if (C.type == 1) {
                 if (list_of_program.count(C.line_number)) {
-                    num=C.line_number;
+                    num = C.line_number;
                     continue;
-                }else cout<<"LINE NUMBER ERROR"<<endl;
+                } else cout << "LINE NUMBER ERROR" << endl;
             }
         }
         catch (ErrorException err) {
-            cout<<err.getMessage()<<endl;
+            cout << err.getMessage() << endl;
         }
         catch (...) {
 
         }
-        num=getNextLineNumber(num);
+        num = getNextLineNumber(num);
     }
 }
+
 void Program::show_list() {
-    int num=getFirstLineNumber();
-    while (num!=end_line){
-        cout<<getSourceLine(num)<<'\n';
-        num=getNextLineNumber(num);
+    int num = getFirstLineNumber();
+    while (num != end_line) {
+        cout << getSourceLine(num) << '\n';
+        num = getNextLineNumber(num);
     }
 }
+
 void Program::show_help() {
 }
