@@ -96,10 +96,4 @@ void processLine(string line, Program & program, EvalState & state) {
 
        }
    }
-/*
-   Expression *exp = parseExp(scanner);
-   int value = exp->eval(state);
-   cout << value << endl;
-   delete exp;
-*/
 }

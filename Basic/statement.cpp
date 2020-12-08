@@ -78,7 +78,14 @@ Statement *parseState(string line, bool flag) {
             exp2 = readE(scanner);
             string tmp = scanner.nextToken();
             tmp = scanner.nextToken();
-            int line_number = stringToInteger(tmp);
+            int line_number;
+            try {
+                line_number = stringToInteger(tmp);
+            } catch (...) {
+                delete exp1;
+                delete exp2;
+                error("SYNTAX ERROR");
+            }
             if ((cmp != "=" && cmp != "<" && cmp != ">") || scanner.hasMoreTokens()) {
                 delete exp1;
                 delete exp2;
@@ -109,8 +116,13 @@ Statement *parseState(string line, bool flag) {
         }
     } else if (first_token == "GOTO") {
         string s = scanner.nextToken();
-        if (scanner.hasMoreTokens()) throw invalid_argument("");
-        int lineNumber = stringToInteger(s);
+        int lineNumber;
+        if (scanner.hasMoreTokens()) error("SYNTAX ERROR");
+        try {
+            lineNumber = stringToInteger(s);
+        } catch (...) {
+            error("SYNTAX ERROR");
+        }
         return new StateGoto(lineNumber);
     } else error("SYNTAX ERROR");
 }
