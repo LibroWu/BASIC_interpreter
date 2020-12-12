@@ -55,6 +55,7 @@ int main() {
  */
 
 void processLine(string line, Program & program, EvalState & state) {
+   Statement* sta;
    TokenScanner scanner;
    scanner.ignoreWhitespace();
    scanner.scanNumbers();
@@ -69,7 +70,8 @@ void processLine(string line, Program & program, EvalState & state) {
            if (scanner.hasMoreTokens())
                program.addSourceLine(line_number, line);
            else program.removeSourceLine(line_number);
-       } catch (...) {
+       } catch (ErrorException err) {
+           cout<<"SYNTAX ERROR"<<endl;
        }
    }
    else if (!scanner.hasMoreTokens()) {
@@ -86,10 +88,11 @@ void processLine(string line, Program & program, EvalState & state) {
    }else {
        try {
            if (token!="LET"&&token!="INPUT"&&token!="PRINT") error("SYNTAX ERROR");
-           Statement *sta = parseState(line, 0);
+           sta = parseState(line, 0);
            sta->execute(state);
            delete sta;
        } catch (ErrorException err) {
+           if (sta!= nullptr) delete sta;
             cout<<err.getMessage()<<endl;
        }
        catch (...) {

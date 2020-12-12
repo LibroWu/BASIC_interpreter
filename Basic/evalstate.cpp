@@ -33,9 +33,11 @@ int EvalState::getValue(string var) {
 bool EvalState::isDefined(string var) {
    return symbolTable.containsKey(var);
 }
+
 void EvalState::clear(){
     symbolTable.clear();
 }
+
 bool check_reserve(string s){
     if (s=="LET") return 1;
     if (s=="RUN") return 1;

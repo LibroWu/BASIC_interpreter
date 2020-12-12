@@ -34,9 +34,16 @@ void Program::clear() {
 
 void Program::addSourceLine(int lineNumber, string line) {
     if (list_of_program.count(lineNumber)) {
+        Statement *tmp= nullptr;
+        try {
+            tmp = parseState(line, 1);
+        } catch (ErrorException err) {
+            if (tmp!= nullptr) delete tmp;
+            throw err;
+        }
         delete list_of_program[lineNumber].sta;
-        list_of_program[lineNumber].line = line;
-        setParsedStatement(lineNumber, parseState(line, 1));
+        list_of_program[lineNumber].line=line;
+        setParsedStatement(lineNumber, tmp);
     } else {
         try {
             if (lineNumber <= 0) error("LINE NUMBER ERROR");
@@ -44,6 +51,7 @@ void Program::addSourceLine(int lineNumber, string line) {
             setParsedStatement(lineNumber, parseState(line, 1));
         } catch (ErrorException err) {
             cout << err.getMessage() << endl;
+            delete list_of_program[lineNumber].sta;
             list_of_program.erase(lineNumber);
         }
     }
@@ -116,4 +124,13 @@ void Program::show_list() {
 }
 
 void Program::show_help() {
+    cout<<"Now you are using the Minimal BASIC Interpreter extended by Libro\n"
+          "Here are tips to use it\n"
+          "Use command HELP to get help\n"
+          "Use command LIST to show the program which has been stored\n"
+          "Use command RUN to run the program\n"
+          "Use command CLEAR to clear the program and the variable table\n"
+          "Lines without numbers can be executed immediately\n"
+          "Now you have learned how to write a program\n"
+          "Have a try\n";
 }
