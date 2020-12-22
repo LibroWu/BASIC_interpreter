@@ -22,10 +22,16 @@ using namespace std;
  */
 
 Expression *parseExp(TokenScanner & scanner) {
-   Expression *exp = readE(scanner);
-   if (scanner.hasMoreTokens()) {
-      error("SYNTAX ERROR");
-   }
+   Expression *exp = nullptr;
+   exp = readE(scanner);
+    try {
+        if (scanner.hasMoreTokens()) {
+            error("SYNTAX ERROR");
+        }
+    } catch (ErrorException err) {
+        if (exp != nullptr)delete exp;
+        throw err;
+    }
    return exp;
 }
 
@@ -41,14 +47,21 @@ Expression *parseExp(TokenScanner & scanner) {
  */
 
 Expression *readE(TokenScanner & scanner, int prec) {
-   Expression *exp = readT(scanner);
+   Expression *exp = nullptr;
+   Expression *rhs = nullptr;
+   exp = readT(scanner);
    string token;
-   while (true) {
-      token = scanner.nextToken();
-      int newPrec = precedence(token);
-      if (newPrec <= prec) break;
-      Expression *rhs = readE(scanner, newPrec);
-      exp = new CompoundExp(token, exp, rhs);
+   try {
+       while (true) {
+           token = scanner.nextToken();
+           int newPrec = precedence(token);
+           if (newPrec <= prec) break;
+           rhs = readE(scanner, newPrec);
+           exp = new CompoundExp(token, exp, rhs);
+       }
+   } catch (ErrorException err) {
+       if (exp != nullptr) delete exp;
+       if (rhs != nullptr) delete rhs;
    }
    scanner.saveToken(token);
    return exp;
@@ -67,9 +80,15 @@ Expression *readT(TokenScanner & scanner) {
    if (type == WORD) return new IdentifierExp(token);
    if (type == NUMBER) return new ConstantExp(stringToInteger(token));
    if (token != "(") error("Illegal term in expression");
-   Expression *exp = readE(scanner);
-   if (scanner.nextToken() != ")") {
-      error("Unbalanced parentheses in expression");
+   Expression *exp = nullptr;
+   try {
+       exp = readE(scanner);
+       if (scanner.nextToken() != ")") {
+           error("Unbalanced parentheses in expression");
+       }
+   } catch (ErrorException err) {
+        if (exp != nullptr) delete exp;
+        throw err;
    }
    return exp;
 }
