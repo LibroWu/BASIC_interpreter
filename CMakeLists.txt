@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.15)
 project(code)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(windows_for_make Basic/Basic.cpp Basic/exp.h Basic/exp.cpp
+add_executable(code Basic/Basic.cpp Basic/exp.h Basic/exp.cpp
                 Basic/program.h Basic/program.cpp
                 Basic/parser.cpp Basic/parser.h
         StanfordCPPLib/tokenscanner.h StanfordCPPLib/tokenscanner.cpp
